@@ -16,7 +16,7 @@ public class AritGeneticaUtil {
 	private static final int POR = -3;
 	private static final int ENTRE = -4;
 	
-	private static int objectiveResult;
+	private static int objectiveResult = 100;
 
 	
 	public static FitnessFunction<Integer> getFitnessFunction(){
@@ -33,9 +33,7 @@ public class AritGeneticaUtil {
 		@Override
 		public double apply(Individual<Integer> arg0) {
 			return 1 /(1 + Math.abs((objectiveResult -  calculateExpression(arg0.getRepresentation()))));
-		}
-
-	
+		}	
 	}	
 	
 	public static class AritGeneticaGoalTest implements GoalTest{
@@ -52,8 +50,8 @@ public class AritGeneticaUtil {
 	
 	public static int calculateExpression(List<Integer> indivRepr){
 		int sum = indivRepr.get(0);
-		for(int i = 1; i < indivRepr.size(); i += 2) {
-			
+		
+		for(int i = 0; i < 10; i += 2) {
 			int op = indivRepr.get(i);
 			int num = indivRepr.get(i+1);
 			
@@ -93,5 +91,23 @@ public class AritGeneticaUtil {
 			
 		Individual<Integer> individual = new Individual<Integer>(repr);
 		return individual;
+	}
+
+	public static String getExpression(Individual<Integer> bestIndividual) {
+		String out="";
+		for(Integer i : bestIndividual.getRepresentation()) {
+			if(i==MAS)
+				out += " + ";
+			else if(i==MENOS)
+				out += " - ";
+			else if(i==POR)
+				out += " * ";
+			else if(i==ENTRE)
+				out += " / ";
+			else
+				out += i;
+		}
+		
+		return out;
 	}
 }
