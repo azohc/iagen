@@ -22,7 +22,7 @@ public class AritGeneticaDemo {
 	public static final int VEINTICINCO = 25;
 	public static final int CINCUENTA = 50;
 	
-	public static final double MUTATION_PROBABILITY = 0.15d;
+	protected static final double MUTATION_PROBABILITY = 0.15d;
 	
 	public static void main(String[] args) {
 
@@ -32,6 +32,7 @@ public class AritGeneticaDemo {
 
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static void newArtiGeneticaDemo(int rango){
 		System.out.println("\nArithmetics GeneticAlgorithm  -->");
 		try {
@@ -43,11 +44,11 @@ public class AritGeneticaDemo {
 				population.add(AritGeneticaUtil.generateRandomIndividual(rango));
 			}
 
-			GeneticAlgorithm<Integer> ga = new GeneticAlgorithm<Integer>(rango, 
+			AritGeneticAlgorithm<Integer> ga = new AritGeneticAlgorithm<Integer>(rango, 
 					AritGeneticaUtil.getFiniteAlphabetForRange(rango), MUTATION_PROBABILITY);
 
 			// Run for a set amount of time
-			Individual<Integer> bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 1000L);
+			Individual<Integer> bestIndividual = ga.AritGA(population, fitnessFunction, goalTest, 1000L);
 
 			System.out.println("Max Time (1 second) Best Individual=\n"
 					+ AritGeneticaUtil.getExpression(bestIndividual));
@@ -60,7 +61,7 @@ public class AritGeneticaDemo {
 			System.out.println("Took            = " + ga.getTimeInMilliseconds() + "ms.");
 
 			// Run till goal is achieved
-			bestIndividual = ga.geneticAlgorithm(population, fitnessFunction, goalTest, 0L);
+			bestIndividual = ga.AritGA(population, fitnessFunction, goalTest, 0L);
 
 			System.out.println("");
 			System.out.println("Goal Test Best Individual=\n" + AritGeneticaUtil.getExpression(bestIndividual));
