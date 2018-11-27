@@ -9,31 +9,30 @@ import aima.core.search.framework.problem.GoalTest;
 import aima.core.search.local.FitnessFunction;
 import aima.core.search.local.Individual;
 
-public class AritGeneticaUtil {
+public class ArithmeticExpressionUtil {
 	
 	private static final int MAS = -1;
 	private static final int MENOS = -2;
 	private static final int POR = -3;
 	private static final int ENTRE = -4;
+	
 	private static final int individualLength = 11;
+	private static int objectiveResult;
 	
-	private static int objectiveResult = 101;
-	
-
 	
 	public static FitnessFunction<Integer> getFitnessFunction(){
-		return new AritGeneticaFitnessAlgo();
+		return new ArithmeticExpressionFitnessAlgo();
 	}
 	
 	public static GoalTest getGoalTest() {
-		return new AritGeneticaGoalTest();		
+		return new ArithmeticExpressionGoalTest();		
 	}
 	
 	public static void setObjectiveResult(int objective) {
 		objectiveResult = objective;
 	}
 	
-	public static class AritGeneticaFitnessAlgo implements FitnessFunction<Integer> {
+	public static class ArithmeticExpressionFitnessAlgo implements FitnessFunction<Integer> {
 
 		@Override
 		public double apply(Individual<Integer> individual) {
@@ -41,7 +40,7 @@ public class AritGeneticaUtil {
 		}	
 	}	
 	
-	public static class AritGeneticaGoalTest implements GoalTest{
+	public static class ArithmeticExpressionGoalTest implements GoalTest{
 
 		@Override
 		public boolean isGoalState(Object o) {
@@ -94,7 +93,7 @@ public class AritGeneticaUtil {
 					new Random().nextInt(range - 1) + 1 : 
 						(new Random().nextInt(3) + 1) * -1);
 			
-		Individual<Integer> individual = new Individual<Integer>(repr); //TODO FIX?	: esta linea deja un 0 al final de invididual (watchearlo)
+		Individual<Integer> individual = new Individual<Integer>(repr); 
 		repr = individual.getRepresentation();
 		return individual;
 	}

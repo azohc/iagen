@@ -12,20 +12,12 @@ import aima.core.search.local.Individual;
 import aima.core.util.CancelableThread;
 
 @SuppressWarnings("hiding")
-public class AritGeneticAlgorithm<Integer> extends GeneticAlgorithm<Integer>{
+public class OriginalArithmeticExpressionGenAlgo<Integer> extends GeneticAlgorithm<Integer>{
 	
-	private static int objectiveResult;
-
-
-	public AritGeneticAlgorithm(int individualLength, Collection<Integer> finiteAlphabet, double mutationProbability) {
+	public OriginalArithmeticExpressionGenAlgo(int individualLength, Collection<Integer> finiteAlphabet, double mutationProbability) {
 		super(individualLength, finiteAlphabet, mutationProbability);
 	}
 	
-	public AritGeneticAlgorithm(int individualLength, Collection<Integer> finiteAlphabet, double mutationProbability,
-			Random random, int objective) {
-		super(individualLength, finiteAlphabet, mutationProbability, random);
-		objectiveResult = objective;
-	}
 	
 	public Individual<Integer> geneticAlgorithm(Collection<Individual<Integer>> initPopulation, FitnessFunction<Integer> fitnessFn,
 			GoalTest goalTest, long maxTimeMilliseconds) {
@@ -56,21 +48,19 @@ public class AritGeneticAlgorithm<Integer> extends GeneticAlgorithm<Integer>{
 
 		// return the best individual in population, according to FITNESS-FN
 		return bestIndividual;
-		}
+	}
 	
-		protected Individual<Integer> mutate(Individual<Integer> child) {
-			int mutateOffset = randomOffset(individualLength);
-			//TODO DEBUG CHECK RANGES
-			int alphaOffset = (mutateOffset % 2 == 0) ? new Random().nextInt(finiteAlphabet.size() - 4)  : new Random().nextInt(4) + finiteAlphabet.size() - 4;
-			
-			List<Integer> mutatedRepresentation = new ArrayList<Integer>(child.getRepresentation());
+	protected Individual<Integer> mutate(Individual<Integer> child) {
+		int mutateOffset = randomOffset(individualLength);
 
-			mutatedRepresentation.set(mutateOffset, finiteAlphabet.get(alphaOffset));
+		int alphaOffset = (mutateOffset % 2 == 0) ? new Random().nextInt(finiteAlphabet.size() - 4)  : new Random().nextInt(4) + finiteAlphabet.size() - 4;
+		
+		List<Integer> mutatedRepresentation = new ArrayList<Integer>(child.getRepresentation());
 
-			Individual<Integer> mutatedChild = new Individual<Integer>(mutatedRepresentation);
+		mutatedRepresentation.set(mutateOffset, finiteAlphabet.get(alphaOffset));
 
-			
-			
-			return mutatedChild;
-		}
+		Individual<Integer> mutatedChild = new Individual<Integer>(mutatedRepresentation);
+		
+		return mutatedChild;
+	}
 }
