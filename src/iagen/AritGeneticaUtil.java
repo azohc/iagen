@@ -15,8 +15,10 @@ public class AritGeneticaUtil {
 	private static final int MENOS = -2;
 	private static final int POR = -3;
 	private static final int ENTRE = -4;
+	private static final int individualLength = 11;
 	
-	private static int objectiveResult = 100;
+	private static int objectiveResult = 101;
+	
 
 	
 	public static FitnessFunction<Integer> getFitnessFunction(){
@@ -27,12 +29,15 @@ public class AritGeneticaUtil {
 		return new AritGeneticaGoalTest();		
 	}
 	
+	public static void setObjectiveResult(int objective) {
+		objectiveResult = objective;
+	}
 	
 	public static class AritGeneticaFitnessAlgo implements FitnessFunction<Integer> {
 
 		@Override
-		public double apply(Individual<Integer> arg0) {
-			return 1 /(1 + Math.abs((objectiveResult -  calculateExpression(arg0.getRepresentation()))));
+		public double apply(Individual<Integer> individual) {
+			return 1 /(1 + Math.abs((objectiveResult -  calculateExpression(individual.getRepresentation()))));
 		}	
 	}	
 	
@@ -48,29 +53,29 @@ public class AritGeneticaUtil {
 		}
 	}
 	
-	public static int calculateExpression(List<Integer> indivRepr){
-		int sum = indivRepr.get(0);
+	public static int calculateExpression(List<Integer> individual){
+		int sum = individual.get(0);
 		
-		for(int i = 0; i < 10; i += 2) {
-			int op = indivRepr.get(i);
-			int num = indivRepr.get(i+1);
+		for(int i = 1; i < individualLength; i += 2) {
+			int op = individual.get(i);
+			int num = individual.get(i+1);
 			
 			if(op==MAS)
 				sum += num;
 			else if(op == MENOS)
 				sum -= num;
 			else if(op == POR)
-				sum += num;
+				sum *= num;
 			else if(op == ENTRE)
 				sum /= num;
 		}
 		return sum;
 	}
 
-	public static Collection<Integer> getFiniteAlphabetForRange(int rango) {
+	public static Collection<Integer> getFiniteAlphabetForRange(int range) {
 		Collection<Integer> alf = new ArrayList<Integer>();
 
-		for (int i = 1; i < rango; i++) 
+		for (int i = 1; i <= range; i++) 
 			alf.add(i);
 		
 		alf.add(MAS);
@@ -82,14 +87,15 @@ public class AritGeneticaUtil {
 	}
 	
 	
-	public static Individual<Integer> generateRandomIndividual(int rango){
+	public static Individual<Integer> generateRandomIndividual(int range){
 		List<Integer> repr = new ArrayList<Integer>();
-		for(int i = 0; i < rango; i++) 
+		for(int i = 0; i < individualLength ; i++) 
 			repr.add(i % 2 == 0 ? 
-					new Random().nextInt(rango - 1) + 1 : 
+					new Random().nextInt(range - 1) + 1 : 
 						(new Random().nextInt(3) + 1) * -1);
 			
-		Individual<Integer> individual = new Individual<Integer>(repr);
+		Individual<Integer> individual = new Individual<Integer>(repr); //TODO FIX?	: esta linea deja un 0 al final de invididual (watchearlo)
+		repr = individual.getRepresentation();
 		return individual;
 	}
 

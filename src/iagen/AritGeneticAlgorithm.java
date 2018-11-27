@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import aima.core.search.framework.problem.GoalTest;
 import aima.core.search.local.FitnessFunction;
@@ -12,13 +11,23 @@ import aima.core.search.local.GeneticAlgorithm;
 import aima.core.search.local.Individual;
 import aima.core.util.CancelableThread;
 
+@SuppressWarnings("hiding")
 public class AritGeneticAlgorithm<Integer> extends GeneticAlgorithm<Integer>{
+	
+	private static int objectiveResult;
+
 
 	public AritGeneticAlgorithm(int individualLength, Collection<Integer> finiteAlphabet, double mutationProbability) {
 		super(individualLength, finiteAlphabet, mutationProbability);
 	}
 	
-	public Individual<Integer> AritGA(Collection<Individual<Integer>> initPopulation, FitnessFunction<Integer> fitnessFn,
+	public AritGeneticAlgorithm(int individualLength, Collection<Integer> finiteAlphabet, double mutationProbability,
+			Random random, int objective) {
+		super(individualLength, finiteAlphabet, mutationProbability, random);
+		objectiveResult = objective;
+	}
+	
+	public Individual<Integer> geneticAlgorithm(Collection<Individual<Integer>> initPopulation, FitnessFunction<Integer> fitnessFn,
 			GoalTest goalTest, long maxTimeMilliseconds) {
 		Individual<Integer> bestIndividual = null;
 
