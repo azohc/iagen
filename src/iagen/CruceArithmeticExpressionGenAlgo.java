@@ -86,7 +86,7 @@ public class CruceArithmeticExpressionGenAlgo<Integer> extends GeneticAlgorithm<
 			else 
 				// Si no, uno de los candidatos al cruce es elegido para
 				// añadirse a la siguiente generacion, de forma aleatoria
-				child = (random.nextDouble() < 0.5) ? x : y;	//TODO ASK
+				child = (random.nextDouble() < 0.5) ? x : y;	
 			
 			// if (small random probability) then child <- MUTATE(child)
 			if (random.nextDouble() <= mutationProbability) {
