@@ -66,44 +66,36 @@ public class NoDestructivoArithmeticExpressionGenAlgo<Integer> extends GeneticAl
 	}
 	
 	
-	@SuppressWarnings("unchecked")
 	protected List<Individual<Integer>> nextGeneration(List<Individual<Integer>> population, FitnessFunction<Integer> fitnessFn) {
 		// new_population <- empty set
 		List<Individual<Integer>> newPopulation = new ArrayList<Individual<Integer>>(population.size());
 		// for i = 1 to SIZE(population) do
 		for (int i = 0; i < population.size(); i++) {
-			
 			// x <- RANDOM-SELECTION(population, FITNESS-FN)
 			Individual<Integer> x = randomSelection(population, fitnessFn);
 			// y <- RANDOM-SELECTION(population, FITNESS-FN)
 			Individual<Integer> y = randomSelection(population, fitnessFn);
-	
-			Individual<Integer> child = reproduce(x, y); 
-		
+			// child <- REPRODUCE(x, y)
+			Individual<Integer> child = reproduce(x, y);
 			// if (small random probability) then child <- MUTATE(child)
-			if (random.nextDouble() <= mutationProbability) {
+			if (random.nextDouble() <= mutationProbability) {	
 				child = mutate(child);
 			}
-			//TODO FIX , ASK ?!?!?
-			ArithmeticExpressionFitnessAlgo fn = (ArithmeticExpressionFitnessAlgo) fitnessFn;
-			double fnX = fn.apply((Individual<java.lang.Integer>) x);
-			double fnY = fn.apply((Individual<java.lang.Integer>) y);
-			double fnC = fn.apply((Individual<java.lang.Integer>) child);
 			
-			if(fnC > fnX) {
-				if(fnC > fnY) 
-					newPopulation.add(child);
-				else 
-					newPopulation.add(y);	
-			}
+			double fnx = fitnessFn.apply(x), 
+				   fny = fitnessFn.apply(y), 
+				   fnc = fitnessFn.apply(child);
+			
+			// add individual with best fitness value to new_population
+			if(fnc > fnx && fnc > fny)
+				newPopulation.add(child);
 			else {
-				if(fnX > fnY) 
-					newPopulation.add(x);				
+				if(fnx > fny)
+					newPopulation.add(x);
 				else 
 					newPopulation.add(y);
 			}
 		}
-		
 		return newPopulation;
 	}
 

@@ -11,10 +11,10 @@ import aima.core.search.local.Individual;
 
 public class ArithmeticExpressionUtil {
 	
-	private static final int MAS = -1;
-	private static final int MENOS = -2;
-	private static final int POR = -3;
-	private static final int ENTRE = -4;
+	private static final int ADD = -1;
+	private static final int SUB = -2;
+	private static final int MUL = -3;
+	private static final int DIV = -4;
 	
 	private static final int individualLength = 11;
 	private static int objectiveResult;
@@ -32,13 +32,13 @@ public class ArithmeticExpressionUtil {
 		objectiveResult = objective;
 	}
 	
+	
 	public static class ArithmeticExpressionFitnessAlgo implements FitnessFunction<Integer> {
-
 		@Override
 		public double apply(Individual<Integer> individual) {
-			return 1 /(1 + Math.abs((objectiveResult -  calculateExpression(individual.getRepresentation()))));
+			return 1d /(1 + Math.abs((objectiveResult -  calculateExpression(individual.getRepresentation()))));
 		}	
-	}	
+	}
 	
 	public static class ArithmeticExpressionGoalTest implements GoalTest{
 
@@ -59,38 +59,48 @@ public class ArithmeticExpressionUtil {
 			int op = individual.get(i);
 			int num = individual.get(i+1);
 			
-			if(op==MAS)
+			if(op==ADD)
 				sum += num;
-			else if(op == MENOS)
+			else if(op == SUB)
 				sum -= num;
-			else if(op == POR)
+			else if(op == MUL)
 				sum *= num;
-			else if(op == ENTRE)
+			else if(op == DIV)
 				sum /= num;
 		}
 		return sum;
 	}
 
-	public static Collection<Integer> getFiniteAlphabetForRange(int range) {
+	public static Collection<Integer> getFiniteAlphabet() {
 		Collection<Integer> alf = new ArrayList<Integer>();
 
-		for (int i = 1; i <= range; i++) 
+		for (int i = 1; i <= 10; i++) 
 			alf.add(i);
 		
-		alf.add(MAS);
-		alf.add(MENOS);
-		alf.add(POR);
-		alf.add(ENTRE);
+		alf.add(25);
+		alf.add(50);
+
+		alf.add(ADD);
+		alf.add(SUB);
+		alf.add(MUL);
+		alf.add(DIV);
 		
 		return alf;
 	}
 	
 	
-	public static Individual<Integer> generateRandomIndividual(int range){
+	public static Individual<Integer> generateRandomIndividual(){
 		List<Integer> repr = new ArrayList<Integer>();
+		Collection<Integer> operands = getFiniteAlphabet();
+		
+		operands.remove(ADD);
+		operands.remove(SUB);
+		operands.remove(MUL);
+		operands.remove(DIV);
+		
 		for(int i = 0; i < individualLength ; i++) 
 			repr.add(i % 2 == 0 ? 
-					new Random().nextInt(range - 1) + 1 : 
+					((List<Integer>)operands).get(new Random().nextInt(operands.size())) : 	
 						(new Random().nextInt(3) + 1) * -1);
 			
 		Individual<Integer> individual = new Individual<Integer>(repr); 
@@ -101,18 +111,21 @@ public class ArithmeticExpressionUtil {
 	public static String getExpression(Individual<Integer> bestIndividual) {
 		String out="";
 		for(Integer i : bestIndividual.getRepresentation()) {
-			if(i==MAS)
+			if(i==ADD)
 				out += " + ";
-			else if(i==MENOS)
+			else if(i==SUB)
 				out += " - ";
-			else if(i==POR)
+			else if(i==MUL)
 				out += " * ";
-			else if(i==ENTRE)
+			else if(i==DIV)
 				out += " / ";
 			else
 				out += i;
 		}
 		
+		out += " = " + calculateExpression(bestIndividual.getRepresentation());
+		
 		return out;
 	}
+
 }
